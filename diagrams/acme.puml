@@ -20,65 +20,23 @@ System(payment_provider, "Payment Provider", "", "", $sprite="bank")
 
 Container(frontend, "Web UI", "React", "Serves customer", $sprite="react")
 
+!include frontend_components.puml
+
 Enterprise_Boundary(acme, "ACME Services") {
 'Components.
-    System_Boundary(auth_system, "[[https://github.com/acme-corp-tech/architecture/wiki/auth_system.svg User authentication]]") {
-        Container(auth_service, "Auth Service", "Go", "Manages user auth tokens", $sprite="go")
-        ContainerDb(auth_service_db, "Auth Service Database", "MySQL", "", $sprite="mysql")
-    }
-
-    System_Boundary(goods_system, "[[https://github.com/acme-corp-tech/architecture/wiki/goods_system.svg Goods for sale]]") {
-        Container(goods_service, "Goods Service", "Go", "Provides information about store goods", $sprite="go")
-        ContainerDb(goods_service_db, "Goods Service Database", "MySQL", "", $sprite="mysql")
-        ContainerDb(goods_service_search, "Goods Service Search Index", "MeiliSearch", "")
-    }
-
-    System_Boundary(cart_system, "[[https://github.com/acme-corp-tech/architecture/wiki/cart_system.svg Shopping cart]]") {
-        Container(cart_service, "Cart Service", "Go", "Tracks cart contents", $sprite="go")
-        ContainerDb(cart_service_storage, "Cart Service Storage", "Redis", "", $sprite="redis")
-    }
-
-    System_Boundary(order_system, "[[https://github.com/acme-corp-tech/architecture/wiki/order_system.svg Shipping order]]") {
-        Container(order_service, "Order Service", "Go", "Keeps track of orders", $sprite="go")
-        ContainerDb(order_service_db, "Order Service Database", "MySQL", "", $sprite="mysql")
-    }
-
-    System_Boundary(payment_system, "[[https://github.com/acme-corp-tech/architecture/wiki/payment_system.svg Payment]]") {
-        Container(payment_service, "Payment Service", "Go", "Integrates with external payment providers", $sprite="go")
-    }
-
+    !include cart_components.puml
+    !include auth_components.puml
+    !include goods_components.puml
+    !include order_components.puml
+    !include payment_components.puml
 }
 
 'Relations.
-Rel(customer, frontend, "Browses goods")
-Rel(customer, frontend, "Adds items to cart")
-Rel(customer, frontend, "Creates a shipping order")
-Rel(customer, frontend, "Pays for order")
-
-Rel(frontend, auth_service, "Authenticates users")
-Rel(frontend, goods_service, "Gets goods information")
-Rel(frontend, goods_service, "Finds goods")
-Rel(frontend, cart_service, "Adds/removes items from cart")
-Rel(frontend, order_service, "Creates an order from cart")
-Rel(frontend, payment_service, "Initiates payment")
-
-Rel(auth_service, auth_service_db, "Stores user auth tokens")
-
-Rel(goods_service, goods_service_db, "Stores goods information")
-Rel(goods_service, goods_service_search, "Indexes goods")
-
-Rel(order_service, cart_service, "Gets items for new order")
-Rel(order_service, shipping_team, "Sends order to the shipping team")
-Rel(order_service, order_service_db, "Stores order information")
-
-
-Rel(payment_service, order_service, "Updates order status")
-Rel(payment_service, payment_provider, "Redirects to payment provider UI")
-Rel(payment_provider, payment_service, "Receives payment")
-
-Rel(shipping_team, customer, "Sends goods to customer")
-Rel(shipping_team, order_service, "Changes order status")
-
-Rel(cart_service, cart_service_storage, "Stores cart contents")
+!include cart_relations.puml
+!include auth_relations.puml
+!include frontend_relations.puml
+!include goods_relations.puml
+!include order_relations.puml
+!include payment_relations.puml
 
 @enduml

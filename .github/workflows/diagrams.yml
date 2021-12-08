@@ -20,7 +20,7 @@ jobs:
         with:
           repository: ${{ github.repository }}.wiki
           path: wiki
-          token: ${{ secrets.GITHUB_TOKEN }}
+#          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate SVG diagrams
         uses: docker://vearutop/plantuml:v1.2021.7
         with:

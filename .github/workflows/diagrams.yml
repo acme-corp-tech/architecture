@@ -14,13 +14,12 @@ jobs:
         uses: actions/checkout@v2
       - name: Fetch external diagrams
         run: |
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} ./diagrams/fetch-external.sh
+          GITHUB_TOKEN=${{ secrets.ORG_GITHUB_TOKEN }} ./diagrams/fetch-external.sh
       - name: Checkout wiki
         uses: actions/checkout@v2
         with:
           repository: ${{ github.repository }}.wiki
           path: wiki
-#          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate SVG diagrams
         uses: docker://vearutop/plantuml:v1.2021.7
         with:

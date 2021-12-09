@@ -17,7 +17,6 @@ Person(shipping_team, "Shipping/warehouse Team", "", $sprite="users")
 
 System(payment_provider, "Payment Provider", "", "", $sprite="bank")
 
-
 Container(frontend, "Web UI", "React", "Serves customer", $sprite="react")
 
 !include frontend_components.puml
@@ -38,5 +37,8 @@ Enterprise_Boundary(acme, "ACME Services") {
 !include goods_relations.puml
 !include order_relations.puml
 !include payment_relations.puml
+
+Rel(shipping_team, customer, "Sends goods to customer")
+Rel(shipping_team, order_service, "Changes order status")
 
 @enduml
